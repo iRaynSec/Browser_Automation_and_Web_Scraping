@@ -1,4 +1,5 @@
 from selenium import webdriver
+import time
 
 def get_driver():
     # add_argument is used to add command-line arguments to the Chrome webdriver, the options below make browsing easier
@@ -24,10 +25,18 @@ def get_driver():
     driver.get("http://automated.pythonanywhere.com")
     return driver
 
+def clean_text(text):
+    """Extract only the temperature from text"""
+    #This will give us a list ([pt1, pt2]), and assign the numerical temp to output as a float
+    output = float(text.split(": ")[1])
+    return output
+
 def main():
     driver = get_driver()
+    #Pause the script for 2 seconds to give webpage time to load
+    time.sleep(2)
     # providing the x-path (via html inspect) of the text we want to scrape
-    element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[1]")
-    return element.text
+    element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]")
+    return clean_text(element.text)
 
 print(main())
