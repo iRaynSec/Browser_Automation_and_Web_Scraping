@@ -1,4 +1,6 @@
 from selenium import webdriver
+#This import gives us access to "Key" functions like enter
+from selenium.webdriver.common.keys import Keys
 import time
 
 def get_driver():
@@ -17,12 +19,14 @@ def get_driver():
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     # Disables auotmationcontrolled feature that helps chrome detect that it is being controlled by selenium
     options.add_argument("disable-blink-features=AutomationControlled")
+    #This will keep the page running as long as we do not call the quit function
+    options.add_experimental_option("detach",True)
     # Set driver variable to call the chrome driver to utilize options
     # options on the left side is the arugment wd.chrome constructor expects which tells it to use the options we created
     # options on the right represents all the custom "options" we provided
     driver = webdriver.Chrome(options=options)
     # give driver a page to return
-    driver.get("http://automated.pythonanywhere.com")
+    driver.get("http://automated.pythonanywhere.com/login/")
     return driver
 
 def clean_text(text):
@@ -33,10 +37,12 @@ def clean_text(text):
 
 def main():
     driver = get_driver()
-    #Pause the script for 2 seconds to give webpage time to load
+    driver.find_element(by="id", value="id_username").send_keys("automated")
+    #Pause the script for 2 seconds to give time between operations
     time.sleep(2)
-    # providing the x-path (via html inspect) of the text we want to scrape
-    element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]")
-    return clean_text(element.text)
+    #provide password and then "hit" enter
+    driver.find_element(by="id", value="id_password").send_keys("automatedautomated" + Keys.RETURN)
+    #After we log in this will take us to the home page
+    driver.find_element(by="xpath", value="/html/body/nav/div/a").click()
 
 print(main())
