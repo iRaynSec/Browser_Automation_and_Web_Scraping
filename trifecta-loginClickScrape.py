@@ -18,7 +18,7 @@ def get_driver():
 
 
 def clean_txt(text):
-    output = text.split(": ")[1]
+    output = float(text.split(": ")[1])
     return output
 
 
@@ -29,8 +29,8 @@ def main():
     driver.find_element(by="id", value="id_password").send_keys("automatedautomated" + Keys.RETURN)
     driver.find_element(by="xpath", value="/html/body/nav/div/a").click()
     time.sleep(2)
-    element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]")
-    return clean_txt(element.text)
+    text = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]").text
+    return clean_txt(text)
 
 
 print(main())
