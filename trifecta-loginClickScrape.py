@@ -22,6 +22,11 @@ def clean_txt(text):
     return output
 
 
+def logTemperature(temperature):
+    with open("temperatures.txt","a") as file:
+        file.write(str(temperature) + "\n")
+
+
 def main():
     driver = get_driver()
     driver.find_element(by="id", value="id_username").send_keys("automated")
@@ -30,7 +35,9 @@ def main():
     driver.find_element(by="xpath", value="/html/body/nav/div/a").click()
     time.sleep(2)
     text = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]").text
-    return clean_txt(text)
+    cleanText = clean_txt(text)
+    logTemperature(cleanText)
+    return cleanText
 
 
 print(main())
